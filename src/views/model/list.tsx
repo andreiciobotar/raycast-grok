@@ -2,7 +2,7 @@ import { Icon, List } from "@raycast/api";
 import { Model } from "../../type";
 
 // Debug logging utility
-function debugLog(message: string, data?: any) {
+function debugLog<T>(message: string, data?: T) {
   console.log(`[DEBUG] ${message}`, data ? JSON.stringify(data, null, 2) : "");
 }
 

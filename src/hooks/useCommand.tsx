@@ -4,7 +4,7 @@ import { CommandHook, Command, Model } from "../type";
 import { useModel } from "./useModel";
 
 // Debug logging utility
-function debugLog(message: string, data?: any) {
+function debugLog<T>(message: string, data?: T) {
   console.log(`[DEBUG] ${message}`, data ? JSON.stringify(data, null, 2) : "");
 }
 
@@ -122,7 +122,7 @@ export function useCommand(): CommandHook {
         style: Toast.Style.Success,
       });
     },
-    [addModel, setData]
+    [addModel, setData],
   );
 
   const update = useCallback(
@@ -145,7 +145,7 @@ export function useCommand(): CommandHook {
         style: Toast.Style.Success,
       });
     },
-    [updateModel, setData]
+    [updateModel, setData],
   );
 
   const remove = useCallback(
@@ -166,7 +166,7 @@ export function useCommand(): CommandHook {
         style: Toast.Style.Success,
       });
     },
-    [removeModel, setData]
+    [removeModel, setData],
   );
 
   const clear = useCallback(async () => {
@@ -197,21 +197,18 @@ export function useCommand(): CommandHook {
       debugLog("Setting commands", { commandCount: Object.keys(commands).length });
       setData(commands);
     },
-    [setData]
+    [setData],
   );
 
-  const isDefault = useCallback(
-    (id: string): boolean => {
-      const isDefaultCommand = id in DEFAULT_COMMANDS;
-      debugLog("Checking if command is default", { commandId: id, isDefault: isDefaultCommand });
-      return isDefaultCommand;
-    },
-    []
-  );
+  const isDefault = useCallback((id: string): boolean => {
+    const isDefaultCommand = id in DEFAULT_COMMANDS;
+    debugLog("Checking if command is default", { commandId: id, isDefault: isDefaultCommand });
+    return isDefaultCommand;
+  }, []);
 
   return useMemo(
     () => ({ data, isLoading, add, update, remove, clear, setCommand, isDefault }),
-    [data, isLoading, add, update, remove, clear, setCommand, isDefault]
+    [data, isLoading, add, update, remove, clear, setCommand, isDefault],
   );
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { clearSearchBar, getPreferenceValues, showToast, Toast } from "@raycast/api";
 import { useCallback, useMemo, useRef, useState } from "react";
 import say from "say";
@@ -7,11 +8,14 @@ import { useAutoTTS } from "./useAutoTTS";
 import { useHistory } from "./useHistory";
 
 // Debug logging utility
-function debugLog(message: string, data?: any) {
+function debugLog<T>(message: string, data?: T) {
   console.log(`[DEBUG] ${message}`, data ? JSON.stringify(data, null, 2) : "");
 }
 
-async function callGrokAPI(params: { model: string; messages: any[]; stream: boolean }, options: { signal: AbortSignal }) {
+async function callGrokAPI(
+  params: { model: string; messages: string[]; stream: boolean },
+  options: { signal: AbortSignal },
+) {
   const apiKey = getPreferenceValues<{ apiKey: string }>().apiKey;
   if (!apiKey) {
     debugLog("API key missing");
@@ -21,7 +25,7 @@ async function callGrokAPI(params: { model: string; messages: any[]; stream: boo
   const endpoint = "https://api.x.ai/v1/chat/completions";
   const headers = {
     "Content-Type": "application/json",
-    "Authorization": `Bearer ${apiKey}`,
+    Authorization: `Bearer ${apiKey}`,
   };
   const body = JSON.stringify(params);
 
@@ -153,10 +157,12 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
     try {
       const messages = [
         ...(model.prompt ? [{ role: "system", content: model.prompt }] : []),
-        ...data.map((c) => [
-          { role: "user", content: c.question },
-          { role: "assistant", content: c.answer },
-        ]).flat(),
+        ...data
+          .map((c) => [
+            { role: "user", content: c.question },
+            { role: "assistant", content: c.answer },
+          ])
+          .flat(),
         { role: "user", content: question },
       ];
 

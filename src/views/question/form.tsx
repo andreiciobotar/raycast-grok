@@ -9,7 +9,6 @@ export const QuestionForm = ({
   models,
   onModelChange,
   onSubmit,
-  isFirstCall,
 }: QuestionFormProps) => {
   const [question, setQuestion] = useState<string>(initialQuestion ?? "");
   const [questionError, setQuestionError] = useState<string | undefined>();

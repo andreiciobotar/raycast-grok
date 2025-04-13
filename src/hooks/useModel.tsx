@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { Model, ModelHook } from "../type";
 
 // Debug logging utility
-function debugLog(message: string, data?: any) {
+function debugLog<T>(message: string, data?: T) {
   console.log(`[DEBUG] ${message}`, data ? JSON.stringify(data, null, 2) : "");
 }
 
@@ -55,7 +55,7 @@ const ADDITIONAL_MODELS: Model[] = [
 export function useModel(): ModelHook {
   const [data, setData] = useState<Record<string, Model>>({});
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [isFetching, setFetching] = useState<boolean>(false);
+  const [isFetching] = useState<boolean>(false);
   const [option, setOption] = useState<Model["option"][]>([
     "grok-3-fast-mini",
     "grok-3-beta",
@@ -130,7 +130,7 @@ export function useModel(): ModelHook {
         style: Toast.Style.Success,
       });
     },
-    [setData]
+    [setData],
   );
 
   const update = useCallback(
@@ -153,7 +153,7 @@ export function useModel(): ModelHook {
         style: Toast.Style.Success,
       });
     },
-    [setData]
+    [setData],
   );
 
   const remove = useCallback(
@@ -174,7 +174,7 @@ export function useModel(): ModelHook {
         style: Toast.Style.Success,
       });
     },
-    [setData]
+    [setData],
   );
 
   const clear = useCallback(async () => {
@@ -201,11 +201,11 @@ export function useModel(): ModelHook {
       setData(models);
       setOption([...new Set(Object.values(models).map((m) => m.option))]);
     },
-    [setData]
+    [setData],
   );
 
   return useMemo(
     () => ({ data, isLoading, option, add, update, remove, clear, setModels, isFetching }),
-    [data, isLoading, option, add, update, remove, clear, setModels, isFetching]
+    [data, isLoading, option, add, update, remove, clear, setModels, isFetching],
   );
 }

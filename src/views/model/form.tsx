@@ -6,6 +6,10 @@ import { parse } from "csv-parse/sync";
 import { useCallback, useState } from "react";
 import { getConfiguration } from "../../hooks/useGrokAPI";
 
+function debugLog<T>(message: string, data?: T) {
+  console.log(`[DEBUG] ${message}`, data ? JSON.stringify(data, null, 2) : "");
+}
+
 export const ModelForm = (props: { model?: Model; use: { models: ModelHook }; name?: string }) => {
   const { use, model } = props;
   const { pop } = useNavigation();
@@ -62,7 +66,7 @@ export const ModelForm = (props: { model?: Model; use: { models: ModelHook }; na
       temperature: model?.temperature.toString() ?? "1",
       option: model?.option ?? "grok-3-mini-fast-beta",
       prompt: model?.prompt ?? "You are a helpful assistant.",
-      pinned: model?.pinned ?? false
+      pinned: model?.pinned ?? false,
     },
   });
 
@@ -81,6 +85,7 @@ export const ModelForm = (props: { model?: Model; use: { models: ModelHook }; na
             skipRecordsWithEmptyValues: true,
           });
         } catch (error) {
+          debugLog(error);
           return [];
         }
       },

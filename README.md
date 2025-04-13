@@ -24,3 +24,4 @@ To use the Grok AI extension, you’ll need an xAI API key. Sign up at console.x
      ```bash
      npm install
      npm run build
+     ```

@@ -4,7 +4,8 @@
   "title": "Grok AI",
   "description": "Queries Grok AI API",
   "icon": "icon.png",
-  "author": "a_c",
+  "author": "andrei_ciobotar",
+  "email": "mail@semi-sacred.ai",
   "categories": [
     "Productivity"
   ],
@@ -40,6 +41,7 @@
     {
       "name": "apiKey",
       "title": "Grok API Key",
+      "label": "Input Grok API Key",
       "description": "Your xAI Grok API key",
       "type": "password",
       "required": true
@@ -47,6 +49,7 @@
     {
       "name": "useStream",
       "title": "Use Streaming",
+      "label": "Use Streaming",
       "type": "checkbox",
       "default": true,
       "description": "Enable streaming for Grok responses",
@@ -55,6 +58,7 @@
     {
       "name": "isHistoryPaused",
       "title": "Pause History",
+      "label": "Toggle history",
       "type": "checkbox",
       "default": false,
       "description": "Pause saving chat history",
@@ -73,10 +77,10 @@
   "dependencies": {
     "@raycast/api": "^1.95.0",
     "@raycast/utils": "^1.17.0",
-    "say": "^0.16.0",
-    "uuid": "^9.0.0",
+    "csv-parse": "^5.6.0",
     "moment": "^2.30.1",
-    "csv-parse": "^5.6.0"
+    "say": "^0.16.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^2.0.4",
