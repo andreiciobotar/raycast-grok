@@ -47,18 +47,27 @@
     {
       "name": "useStream",
       "title": "Use Streaming",
-      "type": "boolean",
+      "type": "checkbox",
       "default": true,
       "description": "Enable streaming for Grok responses",
-      "required": false
+      "required": true
     },
     {
       "name": "isHistoryPaused",
       "title": "Pause History",
-      "type": "boolean",
+      "type": "checkbox",
       "default": false,
       "description": "Pause saving chat history",
-      "required": false
+      "required": true
+    },
+    {
+      "name": "isAutoSaveConversation",
+      "label": "Enable auto-save conversation",
+      "description": "Auto-save every conversation that you had with the model",
+      "type": "checkbox",
+      "title": "Auto-save Conversation",
+      "default": true,
+      "required": true
     }
   ],
   "dependencies": {
