@@ -4,7 +4,7 @@
 
 **Grok AI** lets you query xAI's Grok API directly from Raycast, offering a seamless way to ask questions, view conversation history, and manage custom models. Boost your productivity with AI-powered insights, all within the Raycast ecosystem.
 
-Props to the ChatGPT Raycast extension team for some of the functions on here. 
+Props to the ChatGPT Raycast extension team for some of the functions on here. Built with Grok.
 
 ## Features
 
