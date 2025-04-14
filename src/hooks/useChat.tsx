@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { clearSearchBar, getPreferenceValues, showToast, Toast } from "@raycast/api";
 import { useCallback, useMemo, useRef, useState } from "react";
 import say from "say";
