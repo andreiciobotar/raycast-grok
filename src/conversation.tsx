@@ -34,7 +34,7 @@ export default function Ask(props: { conversation?: Conversation; initialQuestio
       pinned: false,
       updated_at: "",
       created_at: new Date().toISOString(),
-    }
+    },
   );
   const [selectedModelId, setSelectedModelId] = useState<string>(props.conversation?.model.id ?? "grok-3");
   const [isLoading, setLoading] = useState<boolean>(true);
@@ -59,29 +59,29 @@ export default function Ask(props: { conversation?: Conversation; initialQuestio
     if (models.isLoading) return;
 
     // Update conversation with latest chats
-    setConversation(prev => ({
+    setConversation((prev) => ({
       ...prev,
       chats: chats.data,
-      updated_at: new Date().toISOString()
+      updated_at: new Date().toISOString(),
     }));
 
     // Handle initial model setup
     if (models.data && conversation.chats.length === 0) {
       const defaultUserModel = models.data["grok-3"] ?? conversation.model;
-      setConversation(prev => ({
+      setConversation((prev) => ({
         ...prev,
         model: defaultUserModel,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       }));
     }
 
     // Handle model selection
     const selectedModel = models.data[selectedModelId];
     if (selectedModel) {
-      setConversation(prev => ({
+      setConversation((prev) => ({
         ...prev,
         model: selectedModel,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       }));
     }
 
@@ -109,7 +109,7 @@ export default function Ask(props: { conversation?: Conversation; initialQuestio
             selectedModel={selectedModelId}
             onModelChange={setSelectedModelId}
             isFirstCall={conversation.chats.length === 0}
-          />
+          />,
         );
       }
     }

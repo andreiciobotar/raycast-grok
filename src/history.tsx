@@ -11,7 +11,7 @@ import { AnswerDetailView } from "./views/answer-detail";
 
 const HistoryActionPanel = ({ chat, onRemove, onClear }: { chat: Chat; onRemove: () => void; onClear: () => void }) => {
   const savedChat = useSavedChat();
-  
+
   return (
     <ActionPanel>
       <CopyActionSection answer={chat.answer} question={chat.question} />
@@ -45,10 +45,11 @@ export default function History() {
   const filteredHistory = history.data
     .sort((a, b) => new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime())
     .filter((value, index, self) => index === self.findIndex((h) => h.id === value.id))
-    .filter((answer) => 
-      !searchText || 
-      answer.question.toLowerCase().includes(searchText.toLowerCase()) ||
-      answer.answer.toLowerCase().includes(searchText.toLowerCase())
+    .filter(
+      (answer) =>
+        !searchText ||
+        answer.question.toLowerCase().includes(searchText.toLowerCase()) ||
+        answer.answer.toLowerCase().includes(searchText.toLowerCase()),
     );
 
   return (
@@ -78,13 +79,15 @@ export default function History() {
               title={answer.question}
               accessories={[{ text: new Date(answer.created_at ?? 0).toLocaleDateString() }]}
               detail={<AnswerDetailView chat={answer} />}
-              actions={answer && selectedAnswerId === answer.id ? (
-                <HistoryActionPanel 
-                  chat={answer} 
-                  onRemove={() => history.remove(answer)} 
-                  onClear={() => history.clear()} 
-                />
-              ) : undefined}
+              actions={
+                answer && selectedAnswerId === answer.id ? (
+                  <HistoryActionPanel
+                    chat={answer}
+                    onRemove={() => history.remove(answer)}
+                    onClear={() => history.clear()}
+                  />
+                ) : undefined
+              }
             />
           ))}
         </List.Section>

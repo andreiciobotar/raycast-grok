@@ -7,7 +7,7 @@ function debugLog<T>(message: string, data?: T) {
   console.log(`[DEBUG] ${message}`, data ? JSON.stringify(data, null, 2) : "");
 }
 
-export const DEFAULT_MODEL: Model =   {
+export const DEFAULT_MODEL: Model = {
   id: "grok-3-mini-beta",
   updated_at: new Date().toISOString(),
   created_at: new Date().toISOString(),
@@ -49,8 +49,7 @@ const ADDITIONAL_MODELS: Model[] = [
     option: "grok-3-mini-fast-beta",
     temperature: "1",
     pinned: false,
-  }
-
+  },
 ];
 
 export function useModel(): ModelHook {
@@ -177,9 +176,6 @@ export function useModel(): ModelHook {
     },
     [setData],
   );
-
-
-  
 
   const clear = useCallback(async () => {
     debugLog("Clearing models");

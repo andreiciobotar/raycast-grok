@@ -173,7 +173,7 @@ export function useChat<T extends Chat>(props: T[]): ChatHook {
 
       const response = await callGrokAPI(
         {
-          model: model.option ||DEFAULT_MODEL.id,
+          model: model.option || DEFAULT_MODEL.id,
           messages: messages as unknown as string[],
           stream: useStream,
         },

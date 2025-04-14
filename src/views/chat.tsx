@@ -9,16 +9,17 @@ import { Chat, ChatViewProps } from "../type";
 import { AnswerDetailView } from "./answer-detail";
 import { EmptyView } from "./empty";
 
-const sortChatsByDate = (chats: Chat[]): Chat[] => 
+const sortChatsByDate = (chats: Chat[]): Chat[] =>
   [...chats].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
 const getChatActions = (selectedChat: Chat, props: ChatViewProps) => {
-  const { question, conversation, use, models, selectedModel, onModelChange, isAutoSaveConversation, setConversation } = props;
-  
+  const { question, conversation, use, models, selectedModel, onModelChange, isAutoSaveConversation, setConversation } =
+    props;
+
   if (use.chats.isLoading) return undefined;
 
   const showAnswerActions = selectedChat.answer && use.chats.selectedChatId === selectedChat.id;
-  const canSaveConversation = !isAutoSaveConversation && !use.conversations.data.find(x => x.id === conversation.id);
+  const canSaveConversation = !isAutoSaveConversation && !use.conversations.data.find((x) => x.id === conversation.id);
 
   return (
     <ActionPanel>
@@ -36,7 +37,7 @@ const getChatActions = (selectedChat: Chat, props: ChatViewProps) => {
           </ActionPanel.Section>
         </>
       ) : null}
-      
+
       <FormInputActionSection
         initialQuestion={question}
         onSubmit={(question) => use.chats.ask(question, conversation.model)}
@@ -44,7 +45,7 @@ const getChatActions = (selectedChat: Chat, props: ChatViewProps) => {
         selectedModel={selectedModel}
         onModelChange={onModelChange}
       />
-      
+
       {use.chats.data.length > 0 && (
         <ActionPanel.Section title="Restart">
           <DestructiveAction
@@ -71,7 +72,7 @@ const getChatActions = (selectedChat: Chat, props: ChatViewProps) => {
           />
         </ActionPanel.Section>
       )}
-      
+
       <PreferencesActionSection />
     </ActionPanel>
   );
