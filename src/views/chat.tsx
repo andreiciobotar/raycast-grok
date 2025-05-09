@@ -24,14 +24,14 @@ const getChatActions = (selectedChat: Chat, props: ChatViewProps) => {
   return (
     <ActionPanel>
       {question.length > 0 ? (
-        <PrimaryAction 
-          title="Get Grok's Answer" 
+        <PrimaryAction
+          title="Get Grok's Answer"
           onAction={() => {
-            const currentModel = models.find(m => m.id === selectedModel);
+            const currentModel = models.find((m) => m.id === selectedModel);
             if (currentModel) {
               use.chats.ask(question, currentModel);
             }
-          }} 
+          }}
         />
       ) : showAnswerActions ? (
         <>
@@ -49,7 +49,7 @@ const getChatActions = (selectedChat: Chat, props: ChatViewProps) => {
       <FormInputActionSection
         initialQuestion={question}
         onSubmit={(question) => {
-          const currentModel = models.find(m => m.id === selectedModel);
+          const currentModel = models.find((m) => m.id === selectedModel);
           if (currentModel) {
             use.chats.ask(question, currentModel);
           }

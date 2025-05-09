@@ -10,7 +10,7 @@ import { useConversations } from "./hooks/useConversations";
 import { DEFAULT_MODEL, useModel } from "./hooks/useModel";
 import { useQuestion } from "./hooks/useQuestion";
 import { useSavedChat } from "./hooks/useSavedChat";
-import { Chat, Conversation, Model } from "./type";
+import { Chat, Conversation } from "./type";
 import { ChatView } from "./views/chat";
 import { ModelDropdown } from "./views/model/dropdown";
 import { QuestionForm } from "./views/question/form";
@@ -98,12 +98,15 @@ export default function Ask(props: { conversation?: Conversation; initialQuestio
     }
   }, [models.isLoading, models.data, question.data, conversation.model]);
 
-  const getActionPanel = (question: string, model: Model) => (
+  const getActionPanel = (question: string) => (
     <ActionPanel>
-      <PrimaryAction title="Get Answer" onAction={() => {
-        const currentModel = models.data[selectedModelId];
-        chats.ask(question, currentModel);
-      }} />
+      <PrimaryAction
+        title="Get Answer"
+        onAction={() => {
+          const currentModel = models.data[selectedModelId];
+          chats.ask(question, currentModel);
+        }}
+      />
       <FormInputActionSection
         initialQuestion={question}
         onSubmit={(question) => {
@@ -143,7 +146,7 @@ export default function Ask(props: { conversation?: Conversation; initialQuestio
             <PreferencesActionSection />
           </ActionPanel>
         ) : (
-          getActionPanel(question.data, conversation.model)
+          getActionPanel(question.data)
         )
       }
       selectedItemId={chats.selectedChatId || undefined}
