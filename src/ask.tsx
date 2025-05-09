@@ -100,10 +100,16 @@ export default function Ask(props: { conversation?: Conversation; initialQuestio
 
   const getActionPanel = (question: string, model: Model) => (
     <ActionPanel>
-      <PrimaryAction title="Get Answer" onAction={() => chats.ask(question, model)} />
+      <PrimaryAction title="Get Answer" onAction={() => {
+        const currentModel = models.data[selectedModelId];
+        chats.ask(question, currentModel);
+      }} />
       <FormInputActionSection
         initialQuestion={question}
-        onSubmit={(question) => chats.ask(question, model)}
+        onSubmit={(question) => {
+          const currentModel = models.data[selectedModelId];
+          chats.ask(question, currentModel);
+        }}
         models={Object.values(models.data)}
         selectedModel={selectedModelId}
         onModelChange={setSelectedModelId}
@@ -126,7 +132,10 @@ export default function Ask(props: { conversation?: Conversation; initialQuestio
           <ActionPanel>
             <FormInputActionSection
               initialQuestion={question.data}
-              onSubmit={(question) => chats.ask(question, conversation.model)}
+              onSubmit={(question) => {
+                const currentModel = models.data[selectedModelId];
+                chats.ask(question, currentModel);
+              }}
               models={Object.values(models.data)}
               selectedModel={selectedModelId}
               onModelChange={setSelectedModelId}
