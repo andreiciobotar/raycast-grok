@@ -19,7 +19,7 @@ export interface UseRobustStreamingOptions {
   maxRetries?: number;
 }
 
-export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
+export function useRobustStreaming(hookOptions: UseRobustStreamingOptions = {}) {
   const [state, setState] = useState<StreamingState>({
     isLoading: false,
     data: "",
@@ -27,8 +27,8 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
     connectionState: "disconnected",
   });
 
-  const recoveryManagerRef = useRef<StreamRecoveryManager>();
-  const readerRef = useRef<ReadableStreamDefaultReader<Uint8Array>>();
+  const recoveryManagerRef = useRef<StreamRecoveryManager | null>(null);
+  const readerRef = useRef<ReadableStreamDefaultReader<Uint8Array> | null>(null);
   const accumulatedDataRef = useRef<string>("");
 
   const parseSSE = useCallback((line: string): { event?: string; data?: string; id?: string } | null => {
@@ -66,7 +66,7 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
               data: prev.data + content,
             }));
 
-            options.onData?.(content);
+            hookOptions.onData?.(content);
           }
         } catch (error) {
           console.error("Failed to parse SSE data:", error);
@@ -77,7 +77,7 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
         recoveryManagerRef.current.updatePartialContent(accumulatedDataRef.current, parsed.id);
       }
     },
-    [parseSSE, options],
+    [parseSSE, hookOptions],
   );
 
   const fetchWithTimeout = useCallback(
@@ -104,7 +104,7 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
   );
 
   const streamRequest = useCallback(
-    async (url: string, options: RequestInit, attemptRecovery: boolean = true): Promise<void> => {
+    async (url: string, requestOptions: RequestInit, attemptRecovery: boolean = true): Promise<void> => {
       if (!recoveryManagerRef.current) {
         recoveryManagerRef.current = new StreamRecoveryManager({
           maxRetries: 3,
@@ -123,9 +123,9 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
         setState((prev) => ({ ...prev, connectionState: "connecting", isLoading: true }));
 
         const response = await fetchWithTimeout(url, {
-          ...options,
+          ...requestOptions,
           headers: {
-            ...options.headers,
+            ...requestOptions.headers,
             ...recoveryHeaders,
           },
           signal: abortController.signal,
@@ -145,7 +145,7 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
           isConnected: true,
         }));
 
-        options.onConnectionChange?.(true);
+        hookOptions.onConnectionChange?.(true);
 
         const reader = response.body.getReader();
         readerRef.current = reader;
@@ -182,14 +182,14 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
           isConnected: false,
         }));
 
-        options.onComplete?.();
-        options.onConnectionChange?.(false);
+        hookOptions.onComplete?.();
+        hookOptions.onConnectionChange?.(false);
       } catch (error) {
         const streamError = recoveryManager.classifyError(error);
 
         if (attemptRecovery && (await recoveryManager.shouldRetry(streamError))) {
           await recoveryManager.prepareRetry(streamError);
-          return streamRequest(url, options, true);
+          return streamRequest(url, requestOptions, true);
         }
 
         setState((prev) => ({
@@ -200,8 +200,8 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
           isConnected: false,
         }));
 
-        options.onError?.(new Error(streamError.message));
-        options.onConnectionChange?.(false);
+        hookOptions.onError?.(new Error(streamError.message));
+        hookOptions.onConnectionChange?.(false);
 
         await showToast({
           style: Toast.Style.Failure,
@@ -210,7 +210,7 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
         });
       }
     },
-    [fetchWithTimeout, processSSELine, options],
+    [fetchWithTimeout, processSSELine, hookOptions],
   );
 
   const start = useCallback(
@@ -229,20 +229,26 @@ export function useRobustStreaming(options: UseRobustStreamingOptions = {}) {
   );
 
   const stop = useCallback(() => {
-    readerRef.current?.cancel();
-    recoveryManagerRef.current?.abort();
+    if (readerRef.current) {
+      readerRef.current.cancel();
+    }
+    if (recoveryManagerRef.current) {
+      recoveryManagerRef.current.abort();
+    }
     setState((prev) => ({
       ...prev,
       isLoading: false,
       connectionState: "disconnected",
       isConnected: false,
     }));
-    options.onConnectionChange?.(false);
-  }, [options]);
+    hookOptions.onConnectionChange?.(false);
+  }, [hookOptions]);
 
   const reset = useCallback(() => {
     stop();
-    recoveryManagerRef.current?.reset();
+    if (recoveryManagerRef.current) {
+      recoveryManagerRef.current.reset();
+    }
     accumulatedDataRef.current = "";
     setState({
       isLoading: false,
