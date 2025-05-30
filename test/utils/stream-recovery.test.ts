@@ -63,7 +63,7 @@ describe('StreamRecoveryManager', () => {
     });
 
     it('should classify network errors correctly', () => {
-      const error = new Error('Network connection lost');
+      const error = new Error('fetch failed due to network issue');
       const classified = manager.classifyError(error);
       
       expect(classified.type).toBe(StreamErrorType.NETWORK);

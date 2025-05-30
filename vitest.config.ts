@@ -26,6 +26,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@raycast/api': path.resolve(__dirname, './test/mocks/raycast-api-mock.ts'),
+      '@raycast/utils': path.resolve(__dirname, './test/mocks/raycast-utils-mock.ts'),
     },
   },
 });
