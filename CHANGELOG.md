@@ -1,12 +1,10 @@
 # Grok AI Changelog
 
-## [Dynamic Model Fetching] - {PR_MERGE_DATE}
+## [Enhanced Reliability & Dynamic Models] - {PR_MERGE_DATE}
 - Added dynamic model fetching from xAI's `/v1/models` API endpoint
 - Implemented automatic discovery of new models without extension updates
 - Added 1-hour cache for fetched models to reduce API calls
 - Added automatic fallback to hardcoded models if API is unavailable
-
-## [Streaming Reliability & Testing] - {PR_MERGE_DATE}
 - Implemented robust error recovery for streaming with automatic retry logic
 - Added comprehensive test suite with Vitest
 - Fixed history persistence issue with singleton pattern
